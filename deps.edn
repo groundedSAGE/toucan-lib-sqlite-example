@@ -1,0 +1,4 @@
+{:deps {toucan {:mvn/version "1.15.0"}
+        seancorfield/next.jdbc {:mvn/version "1.0.13"}
+        org.xerial/sqlite-jdbc {:mvn/version "3.23.1"}
+        }}
