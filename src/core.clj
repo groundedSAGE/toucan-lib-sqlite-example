@@ -2,7 +2,8 @@
   (:require [toucan.db :as db]
             [toucan.models :as models :refer [defmodel]]
             [next.jdbc :as jdbc]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [honeysql.core :refer [raw]]))
 
 (def db2 {:dbtype "sqlite"
           :dbname "example"})
@@ -33,6 +34,8 @@ create table address (
    ;; Create a table from an sql file
   (jdbc/execute! ds [(get-sql "sql/users.sql")])
 
+  ;; Create a table from an sql without JDBC dependency and double connection to db
+  (db/execute! (raw (get-sql "sql/users.sql")))
 
 
    ;; Insert into the address table
