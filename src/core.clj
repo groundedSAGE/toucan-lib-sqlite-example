@@ -38,7 +38,7 @@ create table address (
    ;; Insert into the address table
   (jdbc/execute! ds ["
 insert into address(name,email)
-  values('Sean Corfield','sean@corfield.org')"])
+  values('Wade Dominic','wade@nomail.org')"])
 
   ;; Select from the address table using raw JDBC
   (jdbc/execute! ds ["select * from address"])
