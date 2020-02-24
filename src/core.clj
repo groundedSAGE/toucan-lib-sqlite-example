@@ -1,12 +1,11 @@
 (ns core
   (:require [toucan.db :as db]
             [toucan.models :as models :refer [defmodel]]
-            [next.jdbc :as jdbc]
             [clojure.java.io :as io]
             [honeysql.core :refer [raw]]))
 
-(def db2 {:dbtype "sqlite"
-          :dbname "example"})
+(def db-spec {:dbtype "sqlite"
+              :dbname "example"})
 
 
 (defn get-sql 
@@ -18,35 +17,14 @@
 
   ;; REPL-Driven Code
   
-  (db/set-default-db-connection! db2)   ; Set up Toucan Connection
   
-  (def ds (jdbc/get-datasource db2))    ; Set up JDBC connection
+  ;; Set up Toucan Connection
+  (db/set-default-db-connection! db-spec)  
+
   
-
-   ;; Create a table from a string
-  (jdbc/execute! ds ["
-create table address (
-  id integer primary key autoincrement,
-  name varchar(32),
-  email varchar(255)
-)"])
-
-   ;; Create a table from an sql file
-  (jdbc/execute! ds [(get-sql "sql/users.sql")])
-
-  ;; Create a table from an sql without JDBC dependency and double connection to db
+  ;; Create a table from sql file
   (db/execute! (raw (get-sql "sql/users.sql")))
 
-
-   ;; Insert into the address table
-  (jdbc/execute! ds ["
-insert into address(name,email)
-  values('Wade Dominic','wade@nomail.org')"])
-
-  ;; Select from the address table using raw JDBC
-  (jdbc/execute! ds ["select * from address"])
-  
-  
   ;; Define a model and it's associated table
   (defmodel Address :address)  
   
@@ -54,8 +32,7 @@ insert into address(name,email)
   (db/select Address)
 
   
-
-  (db/insert! Address {:name "New", :email "test"})
+  (db/insert! Address {:name "New", :email "test@nomail.com"})
 
   (db/insert-many! Address [{:name "Test1", :email "test"}
                             {:name "Test2", :email "test"}])
